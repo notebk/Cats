@@ -65,34 +65,6 @@ cats.byColor = function(req, res) {
     };
     var filteredCats = catList.filter(function(item) {
     return item.colors.indexOf(colorFilter) > -1; });
-    
-    filteredCats = filteredCats.sort(function(a, b) {
-      return b.age - a.age});
-
-    res.render("cats", {
-      message: message,
-      cats: filteredCats
-    });
-  };
-
-cats.delete = function(req, res) {
-//  var catList = db.getAll();
-  var message = "This Cat Died:";
-
-// var filteredCats = catList.sort(function(a, b) {
-//    return b.age - a.age});  
-   
-db.data.sort(function(a, b) {
-  return b.age - a.age});  
-
-var oldCat = db.data[0];
-var index = 0;
-  
-  db.remove(index);
-  
-  res.render("cats", {
-    message: message,
-    cats: [oldCat]
-  });
 };
+
 module.exports = cats;

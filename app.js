@@ -7,6 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+//database connection
 mongoose.connect('mongodb://localhost/robots');
 
 var app = express();

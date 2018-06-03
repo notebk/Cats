@@ -54,7 +54,7 @@ cats.new = function(req, res) {
 cats.byColor = function(req, res) {
   var catList = db.getAll();
   var colorFilter;
-  var message;
+  var message; 
 
   if (req.params.color) {
     colorFilter = req.params.color.toLowerCase();

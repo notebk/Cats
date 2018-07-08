@@ -1,11 +1,11 @@
 var path = require("path");
 var express = require('express');
 var catData = require("./catData");
-var Robot = require('../models/model.js');
+var catModel = require('../models/catModel.js');
 var router = express.Router();
-var db = require('../fakeDatabase');
 
-//Code gotten from original olinjs homework solution after failed git push that lost all my data
+
+//Code obtained from original olinjs homework solution after failed git push that lost all my data
 //slightly reformatted to remove mongodb and mongoose connections
 
 var colors = catData.colors;
@@ -29,30 +29,38 @@ cats.new = function(req, res) {
     age: age,
     colors: catColors
   };
-  var newCat = catObj;
-    db.add(newCat);
+// save cat to database
+  var newCat = new catModel(catObj);
+    newCat.save(function(err) {
+      if(err) {
+        res.status(500).send('Something broke!');
+      } else {
     res.render("cats", {
       message: "New cat created:",
       cats: [catObj] 
       });
-    };
+    }
+  });
+};
 
-  cats.list = function(req, res) {
-  var catList = db.getAll();
+cats.list = function(req, res) {
   var colorFilter;
   var message = "Cats by age:";
-  
-  var filteredCats = catList.sort(function(a, b) {
-        return b.age - a.age
-      });
+  // use find() first, otherwise sort won't work
+  catModel.find().sort({age: -1})
+    .exec(function(err, cats) {
+    if (err) {
+      res.status(500).send("Something broke!");
+    } else {
       res.render("cats", {
         message: message,
-        cats: filteredCats
+        cats: cats
       })
+    }
+  })
 };
 
 cats.byColor = function(req, res) {
-  var catList = db.getAll();
   var colorFilter;
   var message; 
 
@@ -62,9 +70,29 @@ cats.byColor = function(req, res) {
   } else {
     colorFilter = 'none';
     message = "Cats by age:";
-    };
-    var filteredCats = catList.filter(function(item) {
-    return item.colors.indexOf(colorFilter) > -1; });
+  }
+  catModel.find({colors: colorFilter})
+          .sort({age: -1})
+          .exec(function(err, cats) {
+            if (err) {
+              res.status(500).send("Something broke!");
+            } else {
+      res.render("cats", {
+        message: message,
+        cats: cats
+      })
+    }
+  })
 };
 
+cats.delete = function(req, res) {
+  catModel.findOneAndRemove({},{sort: {age: -1}}, function(err, cat) {
+    if (err) {
+      res.status(500).send("Something broke!");
+    } else {
+      var deadCat = [cat];
+      var message = "A cat died!";
+    }
+  })
+};
 module.exports = cats;

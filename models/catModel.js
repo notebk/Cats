@@ -2,10 +2,10 @@
 var mongoose = require('mongoose');
 
 // Create a Schema
-var robotSchema = mongoose.Schema({
+var catSchema = mongoose.Schema({
   name: String,
-  abilities: [String],
-  isEvil: Boolean
+  colors: [String],
+  age: Number
 });
 
-module.exports = mongoose.model("robot", robotSchema);
+module.exports = mongoose.model("cat", catSchema);

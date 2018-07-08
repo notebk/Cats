@@ -6,9 +6,10 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require("mongoose");
 
 //database connection
-mongoose.connect('mongodb://localhost/robots');
+mongoose.connect('mongodb://localhost/cats');
 
 var app = express();
 
